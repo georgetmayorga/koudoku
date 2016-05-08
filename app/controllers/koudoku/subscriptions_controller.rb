@@ -103,7 +103,7 @@ module Koudoku
         end
 
       else
-        if current_owner.try(:subscription).try(:plan).try(:name) == "Free"
+        if current_owner.try(:subscription).try(:plan).try(:name) == "Free" && ::Plan.find_by(id: params[:plan]).nil?
           redirect_to edit_owner_subscription_path(current_owner, current_owner.subscription)
         else
           @subscription = ::Subscription.new
