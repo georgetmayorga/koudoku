@@ -104,7 +104,7 @@ module Koudoku
 
       else
         @subscription = ::Subscription.new
-        @subscription.plan = ::Plan.find(params[:plan])
+        @subscription.plan = ::Plan.find_by(id: params[:plan]) || Plan.find_by(name: "Free")
       end
     end
 
