@@ -110,7 +110,7 @@ module Koudoku
 
     def show_existing_subscription
       if @owner.subscription.present? && ::Plan.find_by(id: params[:plan]).try(:name) == "Free"
-        redirect_to owner_subscription_path(@owner, @owner.subscription)
+        redirect_to owner_subscription_path(@owner, @owner.subscription, plan: params[:plan])
       end
     end
 
