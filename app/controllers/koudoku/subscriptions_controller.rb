@@ -142,12 +142,19 @@ module Koudoku
     end
 
     def update
-      if @subscription.update_attributes(subscription_params)
-        flash[:notice] = I18n.t('koudoku.confirmations.subscription_updated')
-        redirect_to owner_subscription_path(@owner, @subscription)
+      @current_plan = ::Plan.find(params[:subscription][:plan_id])
+
+      if @subscription.last_four.nil? && @current_plan.name.downcase != "free"
+        flash[:notice] = "Please update card information to proceed"
+        redirect_to edit_owner_subscription_path(@owner, @subscription, update: 'card')
       else
-        flash[:error] = I18n.t('koudoku.failure.problem_processing_transaction')
-        render :edit
+        if @subscription.update_attributes(subscription_params)
+          flash[:notice] = I18n.t('koudoku.confirmations.subscription_updated')
+          redirect_to owner_subscription_path(@owner, @subscription)
+        else
+          flash[:error] = I18n.t('koudoku.failure.problem_processing_transaction')
+          render :edit
+        end
       end
     end
 
